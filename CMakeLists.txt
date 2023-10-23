@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.5)
+project(depth_control)
+find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(rclpy REQUIRED)
+
+install(PROGRAMS
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+ament_package()
