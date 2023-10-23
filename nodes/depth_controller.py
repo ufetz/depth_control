@@ -8,8 +8,6 @@ from rclpy.node import Node
 This node is your depth controller.
 It takes as input a current depth and a given depth setpoint.
 Its output is a thrust command to the BlueROV's actuators.
-
-You 
 """
 
 
@@ -60,7 +58,6 @@ class DepthControlNode(Node):
         # TODO: Do something...
 
         thrust_z = 1.0  # This doesn't seem right yet...
-
         return thrust_z
 
 
