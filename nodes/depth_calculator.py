@@ -14,10 +14,9 @@ class DepthCalculator(Node):
     def __init__(self):
         super().__init__(node_name='my_second_node')
 
-        qos = QoSProfile(
-            reliability=QoSReliabilityPolicy.
-            RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
-            history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST)
+        qos = QoSProfile(reliability=QoSReliabilityPolicy.BEST_EFFORT,
+                         history=QoSHistoryPolicy.KEEP_LAST,
+                         depth=1)
 
         self.depth_pub = self.create_publisher(DepthStamped, 'depth', 1)
         self.pressure_sub = self.create_subscription(FluidPressure, 'pressure',
