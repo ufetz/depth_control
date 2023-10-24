@@ -67,7 +67,10 @@ class DepthCalculator(Node):
 def main():
     rclpy.init()
     node = DepthCalculator()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == '__main__':
