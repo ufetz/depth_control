@@ -4,6 +4,7 @@ import rclpy
 from hippo_msgs.msg import DepthStamped
 from sensor_msgs.msg import FluidPressure
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 """
 This node takes as input the pressure data and computes a resulting water depth.
 """
@@ -14,9 +15,14 @@ class DepthCalculator(Node):
     def __init__(self):
         super().__init__(node_name='my_second_node')
 
+        qos = QoSProfile(
+            reliability=QoSReliabilityPolicy.
+            RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
+            history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST)
+
         self.depth_pub = self.create_publisher(DepthStamped, 'depth', 1)
         self.pressure_sub = self.create_subscription(FluidPressure, 'pressure',
-                                                     self.on_pressure, 1)
+                                                     self.on_pressure, qos)
 
     def on_pressure(self, pressure_msg):
         pressure = pressure_msg.fluid_pressure
