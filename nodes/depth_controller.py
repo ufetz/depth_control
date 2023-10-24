@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import rclpy
 
-from std_msgs.msg import Float64
-from hippo_msgs.msg import ActuatorSetpoint, DepthStamped
+from hippo_msgs.msg import ActuatorSetpoint, DepthStamped, Float64Stamped
 from rclpy.node import Node
 """
 This node is your depth controller.
@@ -22,7 +21,8 @@ class DepthControlNode(Node):
         self.thrust_pub = self.create_publisher(ActuatorSetpoint,
                                                 'thrust_setpoint', 1)
 
-        self.setpoint_sub = self.create_subscription(Float64, 'depth_setpoint',
+        self.setpoint_sub = self.create_subscription(Float64Stamped,
+                                                     'depth_setpoint',
                                                      self.on_setpoint, 1)
         self.depth_sub = self.create_subscription(DepthStamped, 'depth',
                                                   self.on_depth, 1)

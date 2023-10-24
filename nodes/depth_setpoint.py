@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rclpy
 
-from std_msgs.msg import Float64
+from hippo_msgs.msg import Float64Stamped
 from rclpy.node import Node
 """
 This node computes a square-wave setpoint for the depth controller, i.e.
@@ -24,8 +24,8 @@ class DepthSetpointNode(Node):
         self.setpoint_2 = -0.6  # in m
         self.duration = 10.0  # in seconds
 
-        self.depth_setpoint_pub = self.create_publisher(Float64(),
-                                                        'depth_setpoint', 1)
+        self.depth_setpoint_pub = self.create_publisher(
+            Float64Stamped, 'depth_setpoint', 1)
         self.timer = self.create_timer(1 / 50, self.on_timer)
 
     def on_timer(self):
@@ -39,8 +39,9 @@ class DepthSetpointNode(Node):
             setpoint = self.setpoint_2
 
         # publish setpoint
-        msg = Float64()
+        msg = Float64Stamped()
         msg.data = setpoint
+        msg.header.stamp = self.get_clock().now()
         self.depth_setpoint_pub.publish(msg)
 
 
