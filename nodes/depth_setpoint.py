@@ -18,8 +18,8 @@ class DepthSetpointNode(Node):
         self.start_time = self.get_clock().now()
 
         # change these parameters to adjust the setpoints
-        # ... or change implementation details below
-        # to achieve other setpoint functions.
+        # ... or change implementation details below to achieve other setpoint
+        # functions.
         self.setpoint_1 = -0.4  # in m
         self.setpoint_2 = -0.6  # in m
         self.duration = 10.0  # in seconds
@@ -28,7 +28,8 @@ class DepthSetpointNode(Node):
             Float64Stamped, 'depth_setpoint', 1)
         self.timer = self.create_timer(1 / 50, self.on_timer)
 
-    def on_timer(self):
+    def on_timer(self) -> None:
+        """Timer callback that gets called in the specified time intervals."""
         # change this for other setpoint functions
         now = self.get_clock().now()
         time = self.start_time - now
@@ -38,7 +39,10 @@ class DepthSetpointNode(Node):
         else:
             setpoint = self.setpoint_2
 
-        # publish setpoint
+        now = self.get_clock().now()
+        self.publish_setpoint(setpoint=setpoint, now=now)
+
+    def publish_setpoint(self, setpoint: float, now: rclpy.time.Time) -> None:
         msg = Float64Stamped()
         msg.data = setpoint
         msg.header.stamp = self.get_clock().now()
@@ -48,7 +52,10 @@ class DepthSetpointNode(Node):
 def main():
     rclpy.init()
     node = DepthSetpointNode()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == '__main__':
