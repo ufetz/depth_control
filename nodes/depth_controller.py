@@ -84,7 +84,10 @@ class DepthControlNode(Node):
 def main():
     rclpy.init()
     node = DepthControlNode()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == '__main__':
