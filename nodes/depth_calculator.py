@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-import rclpy
-
-from hippo_msgs.msg import DepthStamped
-from sensor_msgs.msg import FluidPressure
-from rclpy.node import Node
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 """
 This node takes as input the pressure data and computes a resulting water depth.
 """
+import rclpy
+from hippo_msgs.msg import DepthStamped
+from rclpy.node import Node
+from rclpy.qos import QoSHistoryPolicy, QoSProfile, QoSReliabilityPolicy
+from sensor_msgs.msg import FluidPressure
 
 
 class DepthCalculator(Node):
@@ -59,7 +58,7 @@ class DepthCalculator(Node):
             pressure: Measured pressure [Pa].
 
         Returns: Vehicle's depth [m].
-            
+
         """
         # TODO: implement the required depth calculation
         return pressure  # this does not seem to be to correct calculation
