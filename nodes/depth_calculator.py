@@ -24,26 +24,45 @@ class DepthCalculator(Node):
         self.pressure_sub = self.create_subscription(FluidPressure, 'pressure',
                                                      self.on_pressure, qos)
 
-    def on_pressure(self, pressure_msg):
+    def on_pressure(self, pressure_msg: FluidPressure) -> None:
+        """Callback function of the pressure topic subscription, that, by
+        definition, gets called each time a pressure message is received.
+
+        Args:
+            pressure_msg: A pressure measurement.
+        """
         pressure = pressure_msg.fluid_pressure
 
+        # TODO: you can remove this logging function
         self.get_logger().info(
-            f'Hello, I received a pressure of {pressure} Pa. ' +
+            f'Hello, I received a pressure of {pressure} Pa. '
             'I need to calculate the depth based on this measurement.',
             throttle_duration_sec=1)
 
-        # TODO: Do something
-
-        depth = pressure  # that doesn't seem right...
-
-        depth_msg = DepthStamped()
-        depth_msg.depth = depth
-
-        # Let's add a time stamp
+        depth = self.pressure_to_depth(pressure=pressure)
         now = self.get_clock().now()
-        depth_msg.header.stamp = now.to_msg()
+        self.publish_depth_msg(depth=depth, now=now)
 
-        self.depth_pub.publish(depth_msg)
+    def publish_depth_msg(self, depth: float, now: rclpy.time.Time) -> None:
+        msg = DepthStamped()
+        # Let's add a time stamp
+        msg.header.stamp = now.to_msg()
+        # and populate the depth field
+        msg.depth = depth
+        self.depth_pub.publish(msg)
+
+    def pressure_to_depth(self, pressure: float) -> float:
+        """Converts the measures pressure from the pressure sensor to vehicle's
+        depth.
+
+        Args:
+            pressure: Measured pressure [Pa].
+
+        Returns: Vehicle's depth [m].
+            
+        """
+        # TODO: implement the required depth calculation
+        return pressure  # this does not seem to be to correct calculation
 
 
 def main():
