@@ -22,8 +22,8 @@ class DepthCalculator(Node):
         pressure = pressure_msg.fluid_pressure
 
         self.get_logger().info(
-            f"Hello, I received a pressure of {pressure} Pa. " +
-            "I need to calculate the depth based on this measurement.",
+            f'Hello, I received a pressure of {pressure} Pa. ' +
+            'I need to calculate the depth based on this measurement.',
             throttle_duration_sec=1)
 
         # TODO: Do something
