@@ -12,7 +12,7 @@ from sensor_msgs.msg import FluidPressure
 class DepthCalculator(Node):
 
     def __init__(self):
-        super().__init__(node_name='my_second_node')
+        super().__init__(node_name='depth_calculator')
 
         qos = QoSProfile(reliability=QoSReliabilityPolicy.BEST_EFFORT,
                          history=QoSHistoryPolicy.KEEP_LAST,
@@ -31,12 +31,14 @@ class DepthCalculator(Node):
         """
         pressure = pressure_msg.fluid_pressure
 
-        # TODO: you can remove this logging function
+        # TODO: you can remove this logging function, when you are done with the
+        # depth calculator implementation.
         self.get_logger().info(
             f'Hello, I received a pressure of {pressure} Pa. '
             'I need to calculate the depth based on this measurement.',
             throttle_duration_sec=1)
 
+        # TODO: implement the following pressure_to_depth function.
         depth = self.pressure_to_depth(pressure=pressure)
         now = self.get_clock().now()
         self.publish_depth_msg(depth=depth, now=now)

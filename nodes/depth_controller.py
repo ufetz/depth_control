@@ -15,7 +15,7 @@ class DepthControlNode(Node):
         super().__init__(node_name='depth_controller')
 
         self.current_setpoint = 0.0
-        self.current_depth = None
+        self.current_depth = 0.0
 
         self.thrust_pub = self.create_publisher(ActuatorSetpoint,
                                                 'thrust_setpoint', 1)
@@ -75,8 +75,7 @@ class DepthControlNode(Node):
 
         Returns: The control output is the desired thrust in vertical direction.
         """
-        # TODO: Do something...
-
+        # TODO: Apply the PID control
         thrust_z = 0.5  # This doesn't seem right yet...
         return thrust_z
 
