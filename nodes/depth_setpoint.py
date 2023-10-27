@@ -43,7 +43,6 @@ class DepthSetpointNode(Node):
         self.publish_setpoint(setpoint=setpoint, now=now)
 
     def publish_setpoint(self, setpoint: float, now: rclpy.time.Time) -> None:
-        self.get_logger().info('Publishing')
         msg = Float64Stamped()
         msg.data = setpoint
         msg.header.stamp = self.get_clock().now().to_msg()
