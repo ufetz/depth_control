@@ -44,7 +44,7 @@ class DepthControlNode(Node):
             f'I received a depth of {current_depth} m.',
             throttle_duration_sec=1)
 
-        thrust = self.compute_control_output()
+        thrust = self.compute_control_output(current_depth)
         # either set the timestamp to the current time or set it to the
         # stamp of `depth_msg` because the control output corresponds to this
         # point in time. Both choices are meaningful.
