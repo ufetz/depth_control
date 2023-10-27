@@ -18,19 +18,16 @@ class DepthCalculator(Node):
                          history=QoSHistoryPolicy.KEEP_LAST,
                          depth=1)
 
-        self.depth_pub = self.create_publisher(DepthStamped, 'depth', 1)
-        self.pressure_sub = self.create_subscription(FluidPressure, 'pressure',
-                                                     self.on_pressure, qos)
+        self.depth_pub = self.create_publisher(msg_type=DepthStamped,
+                                               topic='depth',
+                                               qos_profile=1)
+        self.pressure_sub = self.create_subscription(msg_type=FluidPressure,
+                                                     topic='pressure',
+                                                     callback=self.on_pressure,
+                                                     qos_profile=qos)
 
     def on_pressure(self, pressure_msg: FluidPressure) -> None:
-        """Callback function of the pressure topic subscription, that, by
-        definition, gets called each time a pressure message is received.
-
-        Args:
-            pressure_msg: A pressure measurement.
-        """
         pressure = pressure_msg.fluid_pressure
-
         # TODO: you can remove this logging function, when you are done with the
         # depth calculator implementation.
         self.get_logger().info(
@@ -52,17 +49,9 @@ class DepthCalculator(Node):
         self.depth_pub.publish(msg)
 
     def pressure_to_depth(self, pressure: float) -> float:
-        """Converts the measures pressure from the pressure sensor to vehicle's
-        depth.
-
-        Args:
-            pressure: Measured pressure [Pa].
-
-        Returns: Vehicle's depth [m].
-
-        """
         # TODO: implement the required depth calculation
-        return pressure  # this does not seem to be to correct calculation
+        depth = pressure  # this does not seem to be to correct calculation
+        return depth
 
 
 def main():

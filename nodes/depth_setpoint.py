@@ -23,12 +23,13 @@ class DepthSetpointNode(Node):
         self.setpoint_2 = -0.6  # in m
         self.duration = 10.0  # in seconds
 
-        self.depth_setpoint_pub = self.create_publisher(Float64Stamped,
-                                                        'depth_setpoint', 1)
-        self.timer = self.create_timer(1 / 50, self.on_timer)
+        self.depth_setpoint_pub = self.create_publisher(msg_type=Float64Stamped,
+                                                        topic='depth_setpoint',
+                                                        qos_profile=1)
+        self.timer = self.create_timer(timer_period_sec=1 / 50,
+                                       callback=self.on_timer)
 
     def on_timer(self) -> None:
-        """Timer callback that gets called in the specified time intervals."""
         # change this for other setpoint functions
         now = self.get_clock().now()
         time = self.start_time - now

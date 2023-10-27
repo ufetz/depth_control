@@ -17,24 +17,26 @@ class DepthControlNode(Node):
         self.current_setpoint = 0.0
         self.current_depth = 0.0
 
-        self.thrust_pub = self.create_publisher(ActuatorSetpoint,
-                                                'thrust_setpoint', 1)
+        self.thrust_pub = self.create_publisher(msg_type=ActuatorSetpoint,
+                                                topic='thrust_setpoint',
+                                                qos_profile=1)
 
-        self.setpoint_sub = self.create_subscription(Float64Stamped,
-                                                     'depth_setpoint',
-                                                     self.on_setpoint, 1)
-        self.depth_sub = self.create_subscription(DepthStamped, 'depth',
-                                                  self.on_depth, 1)
+        self.setpoint_sub = self.create_subscription(msg_type=Float64Stamped,
+                                                     topic='depth_setpoint',
+                                                     callback=self.on_setpoint,
+                                                     qos_profile=1)
+        self.depth_sub = self.create_subscription(msg_type=DepthStamped,
+                                                  topic='depth',
+                                                  callback=self.on_depth,
+                                                  qos_profile=1)
 
     def on_setpoint(self, setpoint_msg: Float64Stamped):
-        # We received a new setpoint!
-        # Let's save it, so that we can use it as soon as we receive
-        # new depth data.
+        # We received a new setpoint! Let's save it, so that we can use it as
+        # soon as we receive new depth data.
         self.current_setpoint = setpoint_msg.data
 
     def on_depth(self, depth_msg: DepthStamped):
-        # We received a new depth message!
-        # Now we can get to action!
+        # We received a new depth message! Now we can get to action!
         current_depth = depth_msg.depth
 
         self.get_logger().info(
@@ -68,13 +70,6 @@ class DepthControlNode(Node):
         self.thrust_pub.publish(msg)
 
     def compute_control_output(self, current_depth: float) -> float:
-        """Applies the PID control law.
-
-        Args:
-            current_depth: Required to compute the control error.
-
-        Returns: The control output is the desired thrust in vertical direction.
-        """
         # TODO: Apply the PID control
         thrust_z = 0.5  # This doesn't seem right yet...
         return thrust_z
