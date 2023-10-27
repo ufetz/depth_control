@@ -51,11 +51,11 @@ class DepthControlNode(Node):
         # option 1:
         # now = self.get_clock().now()
         # option 2:
-        now = rclpy.time.Time.from_msg(depth_msg.header.stamp)
-        self.publish_vertical_thrust(thrust=thrust, now=now)
+        timestamp = rclpy.time.Time.from_msg(depth_msg.header.stamp)
+        self.publish_vertical_thrust(thrust=thrust, timestamp=timestamp)
 
     def publish_vertical_thrust(self, thrust: float,
-                                now: rclpy.time.Time) -> None:
+                                timestamp: rclpy.time.Time) -> None:
         msg = ActuatorSetpoint()
         # we want to set the vertical thrust exlusively. mask out xy-components.
         msg.ignore_x = True
@@ -65,7 +65,7 @@ class DepthControlNode(Node):
         msg.z = thrust
 
         # Let's add a time stamp
-        msg.header.stamp = now.to_msg()
+        msg.header.stamp = timestamp.to_msg()
 
         self.thrust_pub.publish(msg)
 
