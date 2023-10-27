@@ -32,7 +32,7 @@ class DepthSetpointNode(Node):
         # change this for other setpoint functions
         now = self.get_clock().now()
         time = self.start_time - now
-        i = time % (self.duration * 2)
+        i = time.nanoseconds * 1e-9 % (self.duration * 2)
         if i > (self.duration):
             setpoint = self.setpoint_1
         else:
@@ -42,9 +42,10 @@ class DepthSetpointNode(Node):
         self.publish_setpoint(setpoint=setpoint, now=now)
 
     def publish_setpoint(self, setpoint: float, now: rclpy.time.Time) -> None:
+        self.get_logger().info('Publishing')
         msg = Float64Stamped()
         msg.data = setpoint
-        msg.header.stamp = self.get_clock().now()
+        msg.header.stamp = self.get_clock().now().to_msg()
         self.depth_setpoint_pub.publish(msg)
 
 
