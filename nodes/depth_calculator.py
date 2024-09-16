@@ -2,6 +2,7 @@
 """
 This node takes as input the pressure data and computes a resulting water depth.
 """
+
 import rclpy
 from hippo_msgs.msg import DepthStamped
 from rclpy.node import Node
@@ -10,21 +11,24 @@ from sensor_msgs.msg import FluidPressure
 
 
 class DepthCalculator(Node):
-
     def __init__(self):
         super().__init__(node_name='depth_calculator')
 
-        qos = QoSProfile(reliability=QoSReliabilityPolicy.BEST_EFFORT,
-                         history=QoSHistoryPolicy.KEEP_LAST,
-                         depth=1)
+        qos = QoSProfile(
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            history=QoSHistoryPolicy.KEEP_LAST,
+            depth=1,
+        )
 
-        self.depth_pub = self.create_publisher(msg_type=DepthStamped,
-                                               topic='depth',
-                                               qos_profile=1)
-        self.pressure_sub = self.create_subscription(msg_type=FluidPressure,
-                                                     topic='pressure',
-                                                     callback=self.on_pressure,
-                                                     qos_profile=qos)
+        self.depth_pub = self.create_publisher(
+            msg_type=DepthStamped, topic='depth', qos_profile=1
+        )
+        self.pressure_sub = self.create_subscription(
+            msg_type=FluidPressure,
+            topic='pressure',
+            callback=self.on_pressure,
+            qos_profile=qos,
+        )
 
     def on_pressure(self, pressure_msg: FluidPressure) -> None:
         pressure = pressure_msg.fluid_pressure
@@ -33,7 +37,8 @@ class DepthCalculator(Node):
         self.get_logger().info(
             f'Hello, I received a pressure of {pressure} Pa. '
             'I need to calculate the depth based on this measurement.',
-            throttle_duration_sec=1)
+            throttle_duration_sec=1,
+        )
 
         # TODO: implement the following pressure_to_depth function.
         depth = self.pressure_to_depth(pressure=pressure)
