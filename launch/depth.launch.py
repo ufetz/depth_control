@@ -13,11 +13,13 @@ def generate_launch_description() -> LaunchDescription:
     arg = DeclareLaunchArgument('vehicle_name')
     launch_description.add_action(arg)
 
-    group = GroupAction([
-        PushRosNamespace(LaunchConfiguration('vehicle_name')),
-        Node(executable='depth_calculator.py', package='depth_control'),
-        Node(executable='depth_controller.py', package='depth_control'),
-        Node(executable='depth_setpoint.py', package='depth_control'),
-    ])
+    group = GroupAction(
+        [
+            PushRosNamespace(LaunchConfiguration('vehicle_name')),
+            Node(executable='depth_calculator.py', package='depth_control'),
+            Node(executable='depth_controller.py', package='depth_control'),
+            Node(executable='depth_setpoint.py', package='depth_control'),
+        ]
+    )
     launch_description.add_action(group)
     return launch_description

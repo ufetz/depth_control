@@ -4,13 +4,13 @@ This node computes a square-wave setpoint for the depth controller, i.e.
 the setpoint jumps between two different depth values with a set duration.
 You can change this code to try out other setpoint functions, e.g. a sin wave.
 """
+
 import rclpy
 from hippo_msgs.msg import Float64Stamped
 from rclpy.node import Node
 
 
 class DepthSetpointNode(Node):
-
     def __init__(self):
         super().__init__(node_name='depth_setpoint_publisher')
 
@@ -23,11 +23,15 @@ class DepthSetpointNode(Node):
         self.setpoint_2 = -0.6  # in m
         self.duration = 10.0  # in seconds
 
-        self.depth_setpoint_pub = self.create_publisher(msg_type=Float64Stamped,
-                                                        topic='depth_setpoint',
-                                                        qos_profile=1)
-        self.timer = self.create_timer(timer_period_sec=1 / 50,
-                                       callback=self.on_timer)
+        self.depth_setpoint_pub = self.create_publisher(
+            msg_type=Float64Stamped,
+            topic='depth_setpoint',
+            qos_profile=1,
+        )
+        self.timer = self.create_timer(
+            timer_period_sec=1 / 50,
+            callback=self.on_timer,
+        )
 
     def on_timer(self) -> None:
         # change this for other setpoint functions
