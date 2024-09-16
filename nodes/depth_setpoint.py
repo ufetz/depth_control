@@ -21,7 +21,7 @@ class DepthSetpointNode(Node):
         # functions.
         self.setpoint_1 = -0.4  # in m
         self.setpoint_2 = -0.6  # in m
-        self.duration = 10.0  # in seconds
+        self.duration = 20.0  # in seconds
 
         self.depth_setpoint_pub = self.create_publisher(
             msg_type=Float64Stamped,
