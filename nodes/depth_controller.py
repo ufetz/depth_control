@@ -77,7 +77,7 @@ class DepthControlNode(Node):
 
     def compute_control_output(self, current_depth: float) -> float:
         # TODO: Apply the PID control
-        thrust_z = 0.5  # This doesn't seem right yet...
+        thrust_z = 0.0  # This doesn't seem right yet...
         return thrust_z
 
 
