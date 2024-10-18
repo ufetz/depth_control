@@ -32,18 +32,15 @@ class DepthCalculator(Node):
 
     def on_pressure(self, pressure_msg: FluidPressure) -> None:
         pressure = pressure_msg.fluid_pressure
-        # TODO: you can remove this logging function, when you are done with the
-        # depth calculator implementation.
-        self.get_logger().info(
-            f'Hello, I received a pressure of {pressure} Pa. '
-            'I need to calculate the depth based on this measurement.',
-            throttle_duration_sec=1,
-        )
-
-        # TODO: implement the following pressure_to_depth function.
         depth = self.pressure_to_depth(pressure=pressure)
         now = self.get_clock().now()
         self.publish_depth_msg(depth=depth, now=now)
+        # TODO: you can remove this logging function, when you are done with the
+        # depth calculator implementation.
+        # self.get_logger().info(
+        #     f'Received a pressure of {pressure:6.4f} Pa. Calculated depth is {depth:6.4f} m.',
+        #     throttle_duration_sec=1,
+        # )
 
     def publish_depth_msg(self, depth: float, now: rclpy.time.Time) -> None:
         msg = DepthStamped()
@@ -54,8 +51,16 @@ class DepthCalculator(Node):
         self.depth_pub.publish(msg)
 
     def pressure_to_depth(self, pressure: float) -> float:
-        # TODO: implement the required depth calculation
-        depth = pressure  # this does not seem to be to correct calculation
+        # Gravity in m/s²
+        GRAVITY = 9.81
+        # Atmosphere pressure at sea level in Pa
+        PRESSURE_ATM = 101_325
+        # Mass density of the fluid in kg/m³
+        # TODO: turn to configurable parameter
+        density_fluid = 999.97
+
+        # Depth defined with negative sign below sea level
+        depth = -(pressure - PRESSURE_ATM) / (GRAVITY * density_fluid)
         return depth
 
 
